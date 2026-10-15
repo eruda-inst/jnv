@@ -1,3 +1,3 @@
 # JNV
 
-Do stuff.
+It does stuff.
