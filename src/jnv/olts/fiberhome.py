@@ -199,7 +199,6 @@ class FiberhomeOLT:
 
     def run_onu_alarms(
         self,
-        olt_name: str,
         slot: str = "SLOT 001",
         pon: str = "PON 001",
         onu: int | str = 1,
@@ -213,24 +212,14 @@ class FiberhomeOLT:
         pon_num = self._pon_number(pon)
         onu_num = self._onu_number(onu)
 
-        if olt_name == "OLT NEWNET" and slot_num in ("1", "2", "3"):
-            cmds = [
-                "cd /",
-                "cd service",
-                f"telnet slot {slot_num}",
-                "cd alarm",
-                "show alarm current",
-            ]
-        else:
-            cmds = [
-                "cd /",
-                "cd service",
-                f"telnet slot {slot_num}",
-                "cd alarm",
-                f"show curalarm filter object={slot_num}-{pon_num}-{onu_num}",
-            ]
+        cmds = [
+            "cd /",
+            "cd maintenance",
+            "cd alarm",
+            f"show alarm current obj 1/{slot_num}/{pon_num}/{onu_num}",
+        ]
 
-        cleanup = ["cd ..", "quit", "cd /"]
+        cleanup = ["cd /"]
 
         return self._run_telnet_commands(
             cmds, telnet_client=client, cleanup_commands=cleanup
